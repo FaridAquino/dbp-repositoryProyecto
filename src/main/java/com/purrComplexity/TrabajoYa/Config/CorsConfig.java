@@ -15,7 +15,7 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://dbp-frontendproyecto-production.up.railway.app/"));
+        config.setAllowedOrigins(List.of("https://dbp-frontendproyecto-production.up.railway.app"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
         config.setAllowedHeaders(List.of("*"));
 
