@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data
-public class EmpleadorResponseDTO {
+public class EmpleadorDTO {
     private String ruc;
     private String razonSocial;
     private Long telefonoPrincipal;

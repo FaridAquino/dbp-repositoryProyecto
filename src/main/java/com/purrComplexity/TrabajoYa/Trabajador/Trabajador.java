@@ -40,7 +40,7 @@ public class Trabajador {
 
     @ManyToMany
     @JoinTable(
-            name = "persona_postulacion", // nombre de la tabla intermedia
+            name = "persona_postulacion",
             joinColumns = @JoinColumn(name = "persona_id"),
             inverseJoinColumns = @JoinColumn(name = "oferta_id")
     )
@@ -48,13 +48,13 @@ public class Trabajador {
 
     @ManyToMany
     @JoinTable(
-            name = "persona_aplicacion", // otra tabla intermedia distinta
+            name = "persona_contratado",
             joinColumns = @JoinColumn(name = "persona_id"),
             inverseJoinColumns = @JoinColumn(name = "oferta_id")
     )
     private List<OfertaEmpleo> contratado=new ArrayList<>();
 
-    @OneToOne(mappedBy = "trabajador",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "trabajador",fetch = FetchType.LAZY)
     private UserAccount usuario;
 
 }

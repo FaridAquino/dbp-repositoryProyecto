@@ -49,13 +49,13 @@ public class UserAccount implements UserDetails {
 
     private Boolean isTrabajador=false;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "empresario_ruc")
-    private Empleador empresario;
+    private Empleador empresario=null;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "trabajador_id")
-    private Trabajador trabajador;
+    private Trabajador trabajador=null;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -5,6 +5,7 @@ import com.purrComplexity.TrabajoYa.Empleador.Empleador;
 import com.purrComplexity.TrabajoYa.Enum.WeekDays;
 import com.purrComplexity.TrabajoYa.Enum.SistemaRemuneracion;
 import com.purrComplexity.TrabajoYa.Enum.modalidad;
+import com.purrComplexity.TrabajoYa.HorarioDia.HorarioDia;
 import com.purrComplexity.TrabajoYa.Trabajador.Trabajador;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,9 @@ public class OfertaEmpleo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOfertaEmpleo;
+
     private String periodoPago;
+
     private Long montoPorPeriodo;
 
     @Enumerated(EnumType.STRING)
@@ -44,28 +47,22 @@ public class OfertaEmpleo {
 
     private LocalDateTime fechaLimite;
 
-    @Enumerated(EnumType.STRING)
-    private SistemaRemuneracion sistemaRemuneracion;
+    private Boolean isDisponible=true;
 
-    private String hoursPerDay;
-
-    private WeekDays weekDays;
-
-
-    @OneToMany(mappedBy = "ofertaEmpleo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ofertaEmpleo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contrato> contratos =new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "empleador_id")
     private Empleador empleador;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean estadoAplicacion = false;
-
     @ManyToMany(mappedBy = "postulaste")
     private List<Trabajador> postulantes =new ArrayList<>();
 
     @ManyToMany(mappedBy = "contratado")
     private List<Trabajador> contratados =new ArrayList<>();
+
+    @OneToMany(mappedBy = "ofertaEmpleo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HorarioDia> horarioDias=new ArrayList<>();
 
 };

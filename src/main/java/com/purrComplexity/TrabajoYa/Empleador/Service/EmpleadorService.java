@@ -1,15 +1,13 @@
 package com.purrComplexity.TrabajoYa.Empleador.Service;
 
 import com.purrComplexity.TrabajoYa.Empleador.Empleador;
-import com.purrComplexity.TrabajoYa.Empleador.dto.UpdateEmpleadorDTO;
+import com.purrComplexity.TrabajoYa.Empleador.dto.CreateEmpleadorDTO;
+import com.purrComplexity.TrabajoYa.Empleador.dto.EmpleadorDTO;
 import com.purrComplexity.TrabajoYa.exception.*;
 import com.purrComplexity.TrabajoYa.Empleador.Repository.EmpleadorRepository;
-import com.purrComplexity.TrabajoYa.Empleador.dto.EmpleadorRequestDTO;
-import com.purrComplexity.TrabajoYa.Empleador.dto.EmpleadorResponseDTO;
 import com.purrComplexity.TrabajoYa.User.Repository.UserAccountRepository;
 import com.purrComplexity.TrabajoYa.User.UserAccount;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,14 +22,26 @@ public class EmpleadorService {
     private final ModelMapper modelMapper;
     private final UserAccountRepository userAccountRepository;
 
-    public EmpleadorResponseDTO crearEmpleador(Long id_Usuario,EmpleadorRequestDTO empleadorRequestDTO) {
-        if (empleadorRepository.existsByCorreo(empleadorRequestDTO.getCorreo())) {
+    public Empleador getEmpleadorByUserId(Long userId){
+        UserAccount userAccount=userAccountRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("No existe el usuario"));
+
+        if (!userAccount.getIsEmpresario()){
+            throw new UsuarioNoEsEmpleadorException();
+        }
+
+        return userAccount.getEmpresario();
+    }
+
+    public EmpleadorDTO createEmpleador(Long userId, CreateEmpleadorDTO createEmpleadorDTO) {
+
+        if (empleadorRepository.existsByCorreo(createEmpleadorDTO.getCorreo())) {
             throw new EmpleadorWithTheSameCorreo();
         }
-        if (empleadorRepository.existsById(empleadorRequestDTO.getRuc())) {
+        if (empleadorRepository.existsById(createEmpleadorDTO.getRuc())) {
             throw new EmpleadorWithTheSameRUC();
         }
-        UserAccount userAccount=userAccountRepository.findById(id_Usuario).orElseThrow(()->new UsernameNotFoundException("El usuario no exite"));
+
+        UserAccount userAccount=userAccountRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("No existe el usuario"));
 
         if (userAccount.getIsEmpresario()){
             throw new UsuarioYaEsEmpleadorException();
@@ -39,91 +49,52 @@ public class EmpleadorService {
 
         userAccount.setIsEmpresario(true);
 
-        Empleador empleador = modelMapper.map(empleadorRequestDTO, Empleador.class);
-        empleador = empleadorRepository.save(empleador);
+        Empleador empleador = modelMapper.map(createEmpleadorDTO, Empleador.class);
+        Empleador savedEmpleador = empleadorRepository.save(empleador);
 
         userAccount.setEmpresario(empleador);
 
         userAccountRepository.save(userAccount);
 
-        return modelMapper.map(empleador, EmpleadorResponseDTO.class);
+        return modelMapper.map(savedEmpleador, EmpleadorDTO.class);
     }
 
-    public void eliminarEmpleador(Long userId,String id){
+    public void deleteEmpleador(Long idUser){
 
-        UserAccount userAccount= userAccountRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("No existe el usuario"));
+        Empleador empleador= getEmpleadorByUserId(idUser);
 
-        if (!userAccount.getIsEmpresario()){
-            throw new UsuarioNoEsEmpleadorException();
-        }
+        UserAccount userAccount=empleador.getUsuario();
 
-        Empleador empleador=
-                empleadorRepository.findById(id).orElseThrow(TrabajadorNotFound::new);
-
-        if (!userAccount.getEmpresario().getRuc().equals(empleador.getRuc())){
-            throw new EmpleadorNoPerteneceAlUsuarioException();
-        }
+        userAccount.setEmpresario(null);
+        userAccount.setIsEmpresario(false);
 
         empleadorRepository.delete(empleador);
 
     }
 
-    public EmpleadorResponseDTO actulizarEmpleador(EmpleadorRequestDTO empleadorRequestDTO, String id) {
-        Empleador empleador=
-                empleadorRepository.findById(id).orElseThrow(EmpleadorNotFound::new);
+    public EmpleadorDTO updateEmpleador(EmpleadorDTO empleadorDTO, Long userId) {
+        Empleador empleador=getEmpleadorByUserId(userId);
 
-        modelMapper.map(empleadorRequestDTO,empleadorRepository);
+        modelMapper.map(empleadorDTO,empleadorRepository);
 
-        empleador=empleadorRepository.save(empleador);
+        Empleador savedEmpleador=empleadorRepository.save(empleador);
 
-        EmpleadorResponseDTO empleadorResponseDTO=modelMapper.map(empleador,EmpleadorResponseDTO.class);
-
-        return empleadorResponseDTO;
+        return modelMapper.map(savedEmpleador,EmpleadorDTO.class);
     }
 
-    public EmpleadorResponseDTO actualizarParcialmenteEmpleador(Long userID,UpdateEmpleadorDTO updateEmpleadorDTO){
-        ModelMapper mapper=new ModelMapper();
-        mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+    public EmpleadorDTO getEmpleadorDtoById(Long userId){
 
-        UserAccount userAccount=userAccountRepository.findById(userID).orElseThrow(()->new UsernameNotFoundException("No existe el usuario"));
+        Empleador empleador=getEmpleadorByUserId(userId);
 
-        if (!userAccount.getIsEmpresario()){
-            throw new UsuarioNoEsEmpleadorException();
-        }
-
-        Empleador empleador=userAccount.getEmpresario();
-
-
-        mapper.map(updateEmpleadorDTO,empleador);
-
-        empleador=empleadorRepository.save(empleador);
-
-        EmpleadorResponseDTO empleadorResponseDTO=modelMapper.map(empleador,EmpleadorResponseDTO.class);
-
-        return empleadorResponseDTO;
+        return modelMapper.map(empleador,EmpleadorDTO.class);
     }
 
-    public EmpleadorResponseDTO obtenerEmpleador(Long idUsuario){
-
-        UserAccount userAccount=userAccountRepository.findById(idUsuario).orElseThrow(()->new UsernameNotFoundException("No existe el usuario"));
-
-        if (!userAccount.getIsEmpresario()){
-            throw new UsuarioNoEsEmpleadorException();
-        }
-
-        Empleador empleador= userAccount.getEmpresario();
-
-        EmpleadorResponseDTO empleadorResponseDTO=modelMapper.map(empleador,EmpleadorResponseDTO.class);
-
-        return empleadorResponseDTO;
-    }
-
-    public List<EmpleadorResponseDTO> obtenerTodosEmpleador(){
+    public List<EmpleadorDTO> getAllEmpleador(){
         List<Empleador> empleadors=empleadorRepository.findAll();
-        List<EmpleadorResponseDTO> empleadorResponseDTOS=new ArrayList<>();
+        List<EmpleadorDTO> empleadorResponseDTOS=new ArrayList<>();
 
         for (Empleador empleador: empleadors){
-            EmpleadorResponseDTO dto=modelMapper.map(empleador,EmpleadorResponseDTO.class);
+            EmpleadorDTO dto=modelMapper.map(empleador,EmpleadorDTO.class);
             empleadorResponseDTOS.add(dto);
         }
 

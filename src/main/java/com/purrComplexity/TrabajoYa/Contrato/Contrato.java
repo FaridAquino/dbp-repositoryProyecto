@@ -20,7 +20,7 @@ public class Contrato {
     private Long id;
 
     private Date fechaCreacion;
-    //Relaciones
+
     @ManyToOne
     @JoinColumn(name = "trabajadorContratado_id")
     private Trabajador trabajadorContratado;
@@ -29,12 +29,10 @@ public class Contrato {
     @JoinColumn(name = "ofertaEmpleo_id")
     private OfertaEmpleo ofertaEmpleo;
 
-    @OneToOne
-    @JoinColumn(name="calificacionTrabajador_id")
+    @OneToOne(mappedBy = "contrato")
     private CalificacionTrabajador calificacionTrabajador;
 
-    @OneToOne
-    @JoinColumn(name="calificacionEmpresa_id")
+    @OneToOne(mappedBy = "contrato")
     private CalificacionEmpresa calificacionEmpresa;
 
     @DecimalMin("0.0")

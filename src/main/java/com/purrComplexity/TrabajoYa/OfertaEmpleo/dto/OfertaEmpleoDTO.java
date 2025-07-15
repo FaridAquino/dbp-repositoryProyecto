@@ -3,26 +3,30 @@ package com.purrComplexity.TrabajoYa.OfertaEmpleo.dto;
 import com.purrComplexity.TrabajoYa.Enum.SistemaRemuneracion;
 import com.purrComplexity.TrabajoYa.Enum.WeekDays;
 import com.purrComplexity.TrabajoYa.Enum.modalidad;
+import com.purrComplexity.TrabajoYa.HorarioDia.dto.CreatehorarioDiaDTO;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
-public class    OfertaEmpleoResponseDTO {
+public class OfertaEmpleoDTO {
 
     private Long idOfertaEmpleo;
+
     private String periodoPago;
+
     private Long montoPorPeriodo;
 
     @Enumerated(EnumType.STRING)
     private modalidad modalidadEmpleo; // VIRTUAL, PRESENCIAL, HIBRIDO
 
-    private Double latitud;
-
     private Double longitud;
+
+    private Double latitud;
 
     private String habilidades;
 
@@ -33,11 +37,7 @@ public class    OfertaEmpleoResponseDTO {
 
     private LocalDateTime fechaLimite;
 
-    @Enumerated(EnumType.STRING)
-    private SistemaRemuneracion sistemaRemuneracion;
+    private List<CreatehorarioDiaDTO> horarioDias;
 
-    private String hoursPerDay;
-
-    private WeekDays weekDays;
 
 }

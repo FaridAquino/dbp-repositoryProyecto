@@ -13,7 +13,6 @@ public class CreateTrabajadorDTO {
 
     private Double longitud;
     private Double latitud;
-
     
     @NotBlank(message = "El correo es requerido")
     @Email(message = "El formato del correo no es válido")

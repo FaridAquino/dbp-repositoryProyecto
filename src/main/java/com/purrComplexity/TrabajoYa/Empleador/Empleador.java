@@ -17,12 +17,13 @@ public class Empleador {
     private String ruc;
     private String razonSocial;
     private Long telefonoPrincipal;
+
     @Email
     private String correo;
 
     @OneToMany(mappedBy = "empleador",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OfertaEmpleo> ofertas=new ArrayList<>() ;
 
-    @OneToOne(mappedBy = "empresario",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "empresario", fetch = FetchType.LAZY)
     private UserAccount usuario;
 }

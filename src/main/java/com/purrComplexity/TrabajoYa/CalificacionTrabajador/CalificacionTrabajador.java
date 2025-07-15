@@ -2,6 +2,8 @@ package com.purrComplexity.TrabajoYa.CalificacionTrabajador;
 
 import com.purrComplexity.TrabajoYa.Contrato.Contrato;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.Data;
 
 @Data
@@ -11,8 +13,11 @@ public class CalificacionTrabajador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @DecimalMin("0.0")
+    @DecimalMax("5.0")
     private Double puntuacionTrabajador;
 
-    @OneToOne(mappedBy = "calificacionTrabajador")
+    @OneToOne
+    @JoinColumn(name = "contrato_id")
     private Contrato contrato;
 }

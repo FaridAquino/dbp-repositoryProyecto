@@ -17,6 +17,7 @@ public class CalificacionEmpresa {
     @DecimalMax("5.0")
     private Double puntuacionEmpresa;
 
-    @OneToOne(mappedBy = "calificacionEmpresa")
+    @OneToOne
+    @JoinColumn(name = "contrato_id")
     private Contrato contrato;
 }

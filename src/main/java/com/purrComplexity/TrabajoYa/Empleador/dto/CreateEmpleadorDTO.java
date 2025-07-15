@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class EmpleadorRequestDTO {
+public class CreateEmpleadorDTO {
 
     private String ruc;
     private String razonSocial;
