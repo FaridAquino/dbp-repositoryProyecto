@@ -37,6 +37,12 @@ public class OfertaEmpleoDTO {
 
     private LocalDateTime fechaLimite;
 
+    private String puesto;
+
+    private String funcionesPuesto;
+
+    private String razonSocial;
+
     private List<CreatehorarioDiaDTO> horarioDias;
 
 

@@ -3,6 +3,9 @@ package com.purrComplexity.TrabajoYa.Empleador.Service;
 import com.purrComplexity.TrabajoYa.Empleador.Empleador;
 import com.purrComplexity.TrabajoYa.Empleador.dto.CreateEmpleadorDTO;
 import com.purrComplexity.TrabajoYa.Empleador.dto.EmpleadorDTO;
+import com.purrComplexity.TrabajoYa.Empleador.dto.UpdateEmpleadorDTO;
+import com.purrComplexity.TrabajoYa.OfertaEmpleo.OfertaEmpleo;
+import com.purrComplexity.TrabajoYa.OfertaEmpleo.dto.OfertaEmpleoDTO;
 import com.purrComplexity.TrabajoYa.exception.*;
 import com.purrComplexity.TrabajoYa.Empleador.Repository.EmpleadorRepository;
 import com.purrComplexity.TrabajoYa.User.Repository.UserAccountRepository;
@@ -68,11 +71,19 @@ public class EmpleadorService {
         userAccount.setEmpresario(null);
         userAccount.setIsEmpresario(false);
 
+        for (OfertaEmpleo oferta : empleador.getOfertas()) {
+            oferta.getPostulantes().forEach(t -> t.getPostulaste().remove(oferta));
+            oferta.getContratados().forEach(t -> t.getContratado().remove(oferta));
+
+            oferta.getPostulantes().clear();
+            oferta.getContratados().clear();
+        }
+
         empleadorRepository.delete(empleador);
 
     }
 
-    public EmpleadorDTO updateEmpleador(EmpleadorDTO empleadorDTO, Long userId) {
+    public EmpleadorDTO updateEmpleador(UpdateEmpleadorDTO empleadorDTO, Long userId) {
         Empleador empleador=getEmpleadorByUserId(userId);
 
         modelMapper.map(empleadorDTO,empleadorRepository);
@@ -100,4 +111,5 @@ public class EmpleadorService {
 
         return empleadorResponseDTOS;
     }
+
 }

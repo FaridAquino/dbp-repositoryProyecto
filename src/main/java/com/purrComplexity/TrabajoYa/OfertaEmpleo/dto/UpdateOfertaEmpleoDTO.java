@@ -1,9 +1,6 @@
 package com.purrComplexity.TrabajoYa.OfertaEmpleo.dto;
 
-import com.purrComplexity.TrabajoYa.Enum.SistemaRemuneracion;
-import com.purrComplexity.TrabajoYa.Enum.WeekDays;
 import com.purrComplexity.TrabajoYa.Enum.modalidad;
-import com.purrComplexity.TrabajoYa.HorarioDia.HorarioDia;
 import com.purrComplexity.TrabajoYa.HorarioDia.dto.CreatehorarioDiaDTO;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,10 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class CreateOfertaEmpleoDTO {
-
-    private Long idOfertaEmpleo;
-
+public class UpdateOfertaEmpleoDTO {
     private String periodoPago;
 
     private Long montoPorPeriodo;

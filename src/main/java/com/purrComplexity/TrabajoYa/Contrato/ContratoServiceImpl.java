@@ -5,7 +5,6 @@ import com.purrComplexity.TrabajoYa.Contrato.dto.UpdateContratoDTO;
 import com.purrComplexity.TrabajoYa.Contrato.mapper.ContratoMapper;
 import com.purrComplexity.TrabajoYa.Empleador.Empleador;
 import com.purrComplexity.TrabajoYa.Empleador.Repository.EmpleadorRepository;
-import com.purrComplexity.TrabajoYa.Empleo.Empleo;
 import com.purrComplexity.TrabajoYa.OfertaEmpleo.OfertaEmpleo;
 import com.purrComplexity.TrabajoYa.OfertaEmpleo.Repository.OfertaEmpleoRepository;
 import com.purrComplexity.TrabajoYa.User.Repository.UserAccountRepository;

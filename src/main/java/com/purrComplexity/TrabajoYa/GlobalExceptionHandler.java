@@ -140,7 +140,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(TrabajadorNoContratadoException.class)
-    public ResponseEntity<?> habldeTrabajadorNoContratadoException(TrabajadorNoContratadoException ex){
+    public ResponseEntity<?> hanldeTrabajadorNoContratadoException(TrabajadorNoContratadoException ex){
+        ErrorMessage errorMessage=new ErrorMessage(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(NumeroPostulacionesMaximaAlcanzado.class)
+    public ResponseEntity<?> handleNumeroPostulacionesMaximaAlcanzado(NumeroPostulacionesMaximaAlcanzado ex){
         ErrorMessage errorMessage=new ErrorMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }

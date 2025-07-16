@@ -1,4 +1,4 @@
-package com.purrComplexity.TrabajoYa.User.dto;
+package com.purrComplexity.TrabajoYa.DTO;
 
 import lombok.Data;
 

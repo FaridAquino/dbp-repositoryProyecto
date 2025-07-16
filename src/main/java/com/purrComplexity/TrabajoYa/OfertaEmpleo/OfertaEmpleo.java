@@ -8,6 +8,7 @@ import com.purrComplexity.TrabajoYa.Enum.modalidad;
 import com.purrComplexity.TrabajoYa.HorarioDia.HorarioDia;
 import com.purrComplexity.TrabajoYa.Trabajador.Trabajador;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,14 +34,14 @@ public class OfertaEmpleo {
     @Enumerated(EnumType.STRING)
     private modalidad modalidadEmpleo; // VIRTUAL, PRESENCIAL, HIBRIDO
 
-    //private String lugar;
     private Double longitud;
 
     private Double latitud;
 
     private String habilidades;
 
-    private Long numeroPostulaciones;
+    @NotNull
+    private Integer numeroPostulaciones;
 
     @URL(message = "La URL  de la imagen no es válida")
     private String imagen;
@@ -48,6 +49,10 @@ public class OfertaEmpleo {
     private LocalDateTime fechaLimite;
 
     private Boolean isDisponible=true;
+
+    private String Puesto;
+
+    private String FuncionesPuesto;
 
     @OneToMany(mappedBy = "ofertaEmpleo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contrato> contratos =new ArrayList<>();
